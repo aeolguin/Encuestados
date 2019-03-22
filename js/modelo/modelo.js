@@ -30,8 +30,25 @@ Modelo.prototype = {
     this.preguntaAgregada.notificar();
   },
 
-  quitarPregunta : function (id) {
+  //Se quita una pregunta dado el id de la misma
+  quitarPregunta: function(id) {
     this.preguntas.splice(id,1);
+    this.guardar();
+    this.preguntaAgregada.notificar();
+  },
+
+  //Se agregan las respuestas
+
+  //Se suma 1 al voto de una respuesta
+
+  //Se edita una pregunta
+  editarPregunta: function(){
+    
+  },
+
+  //Borrar todas las preguntas
+  borrarTodo: function(){
+    this.preguntas = [];
     this.guardar();
     this.preguntaAgregada.notificar();
   },

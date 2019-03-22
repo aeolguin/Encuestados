@@ -71,6 +71,19 @@ VistaAdministrador.prototype = {
       contexto.controlador.quitarPregunta(id);
 
     });
+
+    e.borrarTodo.click(function() {
+      contexto.limpiarFormulario();
+      contexto.controlador.borrarTodo();
+    });
+
+    e.botonEditarPregunta.click(function(){
+      console.log("se apreto boton editar");
+      var data = $('.list-group-item.active').attr("id")
+      var modificacar = $(".mb-1").val();
+      console.log(modificacar);
+
+    });
     //asociar el resto de los botones a eventos
   },
 
