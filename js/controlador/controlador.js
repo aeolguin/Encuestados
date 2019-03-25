@@ -20,7 +20,7 @@ Controlador.prototype = {
 
   editarPregunta: function(){
     this.modelo.editarPregunta();
-  }
+  },
 
 
 };

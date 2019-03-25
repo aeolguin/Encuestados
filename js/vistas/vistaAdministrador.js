@@ -11,6 +11,14 @@ var VistaAdministrador = function(modelo, controlador, elementos) {
   this.modelo.preguntaAgregada.suscribir(function() {
     contexto.reconstruirLista();
   });
+
+  this.modelo.preguntaBorrada.suscribir(function() {
+    contexto.reconstruirLista();
+  });
+
+  this.modelo.limpiarPreguntas.suscribir(function() {
+    contexto.reconstruirLista();
+  });
 };
 
 
@@ -24,7 +32,6 @@ VistaAdministrador.prototype = {
   },
 
   construirElementoPregunta: function(pregunta){
-    var contexto = this;
     var nuevoItem = $('<li></li>').addClass("list-group-item").attr("id", pregunta.id);
     //completar
     //asignar a nuevoitem un elemento li con clase "list-group-item", id "pregunta.id" y texto "pregunta.textoPregunta"
@@ -63,27 +70,43 @@ VistaAdministrador.prototype = {
       })
       contexto.limpiarFormulario();
       contexto.controlador.agregarPregunta(value, respuestas);
-    });
+    })
 
     e.botonBorrarPregunta.click(function() {
       var id = parseInt($('.list-group-item.active').attr('id'));
       contexto.limpiarFormulario();
       contexto.controlador.quitarPregunta(id);
 
-    });
+    })
 
     e.borrarTodo.click(function() {
       contexto.limpiarFormulario();
       contexto.controlador.borrarTodo();
-    });
+    })
 
     e.botonEditarPregunta.click(function(){
-      console.log("se apreto boton editar");
-      var data = $('.list-group-item.active').attr("id")
-      var modificacar = $(".mb-1").val();
-      console.log(modificacar);
+      var id = parseInt($('.list-group-item.active').attr('id'));
+      console.log(id)
+      var filtrado = modelo.preguntas.find(data => id)
+      console.log(filtrado)
+      Swal.mixin({
+        input: 'text',
+        confirmButtonText: 'Next &rarr;',
+        showCancelButton: true,
+        progressSteps: ['1', '2']
+      }).queue([
+        {
+          title: 'Ingrese la nueva pregunta' ,
+          input: 'text',
+          inputValue: pregunta,
+           
+        }]);
+      
+      
+      
+      // console.log(modificacar);
 
-    });
+    })
     //asociar el resto de los botones a eventos
   },
 

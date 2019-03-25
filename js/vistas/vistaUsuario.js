@@ -11,6 +11,14 @@ var VistaUsuario = function(modelo, controlador, elementos) {
   this.modelo.preguntaAgregada.suscribir(function() {
     contexto.reconstruirLista();
   });
+
+  this.modelo.preguntaBorrada.suscribir(function() {
+    contexto.reconstruirLista();
+  });
+
+  this.modelo.limpiarPreguntas.suscribir(function() {
+    contexto.reconstruirLista();
+  });
 };
 
 VistaUsuario.prototype = {
@@ -23,7 +31,6 @@ VistaUsuario.prototype = {
     elementos.botonAgregar.click(function() {
       contexto.agregarVotos(); 
     });
-      
     this.reconstruirGrafico();
   },
 
@@ -31,6 +38,7 @@ VistaUsuario.prototype = {
   reconstruirGrafico: function(){
     var contexto = this;
     //obtiene las preguntas del local storage
+    //this.modelo.preguntas = JSON.parse(localStorage.getItem("preguntas"));
     var preguntas = this.modelo.preguntas;
     preguntas.forEach(function(clave){
       var listaParaGrafico = [[clave.textoPregunta, 'Cantidad']];
@@ -51,6 +59,11 @@ VistaUsuario.prototype = {
     preguntas.forEach(function(clave){
       //completar
       //agregar a listaPreguntas un elemento div con valor "clave.textoPregunta", texto "clave.textoPregunta", id "clave.id"
+      listaPreguntas.append($("<div>", {
+        value: clave.textoPregunta,
+        text: clave.textoPregunta,
+        id: clave.id,
+      })); 
       var respuestas = clave.cantidadPorRespuesta;
       contexto.mostrarRespuestas(listaPreguntas,respuestas, clave);
     })
@@ -59,15 +72,16 @@ VistaUsuario.prototype = {
   //muestra respuestas
   mostrarRespuestas:function(listaPreguntas,respuestas, clave){
     respuestas.forEach (function(elemento) {
+      if (elemento != ""){
       listaPreguntas.append($('<input>', {
         type: 'radio',
-        value: elemento.textoRespuesta,
+        value: elemento,
         name: clave.id,
       }));
       listaPreguntas.append($("<label>", {
-        for: elemento.textoRespuesta,
-        text: elemento.textoRespuesta
-      }));
+        for: elemento,
+        text: elemento
+      }))};
     });
   },
 
