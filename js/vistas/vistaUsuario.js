@@ -19,6 +19,14 @@ var VistaUsuario = function(modelo, controlador, elementos) {
   this.modelo.limpiarPreguntas.suscribir(function() {
     contexto.reconstruirLista();
   });
+
+  this.modelo.votoAgregado.suscribir(function() {
+    contexto.reconstruirLista();
+  });
+
+  this.modelo.preguntaEditada.suscribir(function() {
+    contexto.reconstruirLista();
+  });
 };
 
 VistaUsuario.prototype = {
@@ -38,7 +46,6 @@ VistaUsuario.prototype = {
   reconstruirGrafico: function(){
     var contexto = this;
     //obtiene las preguntas del local storage
-    //this.modelo.preguntas = JSON.parse(localStorage.getItem("preguntas"));
     var preguntas = this.modelo.preguntas;
     preguntas.forEach(function(clave){
       var listaParaGrafico = [[clave.textoPregunta, 'Cantidad']];
@@ -92,7 +99,9 @@ VistaUsuario.prototype = {
         var id = $(this).attr('id');
         var respuestaSeleccionada = $('input[name=' + id + ']:checked').val();
         $('input[name=' + id + ']').prop('checked',false);
-        contexto.controlador.agregarVoto(nombrePregunta,respuestaSeleccionada);
+        if (respuestaSeleccionada != undefined) {
+        contexto.controlador.agregarVoto(nombrePregunta,respuestaSeleccionada,id);
+        }
       });
   },
 

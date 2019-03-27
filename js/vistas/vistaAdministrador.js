@@ -19,6 +19,10 @@ var VistaAdministrador = function(modelo, controlador, elementos) {
   this.modelo.limpiarPreguntas.suscribir(function() {
     contexto.reconstruirLista();
   });
+
+  this.modelo.preguntaEditada.suscribir(function() {
+    contexto.reconstruirLista();
+  });
 };
 
 
@@ -74,9 +78,18 @@ VistaAdministrador.prototype = {
 
     e.botonBorrarPregunta.click(function() {
       var id = parseInt($('.list-group-item.active').attr('id'));
-      contexto.limpiarFormulario();
-      contexto.controlador.quitarPregunta(id);
-
+      if (isNaN(id)) {
+        Swal.fire({
+          title: "seleccione la respuesta que desea borrar",
+          animation: true,
+          customClass: {
+            popup: 'animated tada'
+          },
+        });
+      }else {
+        contexto.limpiarFormulario();
+        contexto.controlador.quitarPregunta(id);
+      }
     })
 
     e.borrarTodo.click(function() {
@@ -86,29 +99,39 @@ VistaAdministrador.prototype = {
 
     e.botonEditarPregunta.click(function(){
       var id = parseInt($('.list-group-item.active').attr('id'));
-      console.log(id)
-      var filtrado = modelo.preguntas.find(data => id)
-      console.log(filtrado)
-      Swal.mixin({
-        input: 'text',
-        confirmButtonText: 'Next &rarr;',
-        showCancelButton: true,
-        progressSteps: ['1', '2']
-      }).queue([
-        {
-          title: 'Ingrese la nueva pregunta' ,
-          input: 'text',
-          inputValue: pregunta,
-           
-        }]);
-      
-      
-      
-      // console.log(modificacar);
+      if (isNaN(id)) {
+        Swal.fire({
+          title: "seleccione una respuesta para editar",
+          showConfirmButton: true,
+        });
+      } else {
+            var resultadoPregunta = contexto.controlador.obtenerPregunta(id);
+            Swal.mixin({
+                input: 'text',
+                confirmButtonText: 'Next &rarr;',
+                showCancelButton: true,
+                progressSteps: ['1', '2']
+            }).queue([
+                  {
+                    title: 'Ingrese la nueva pregunta' ,
+                    input: 'text',
+                    inputValue: resultadoPregunta.textoPregunta,
+                  },
 
-    })
-    //asociar el resto de los botones a eventos
-  },
+                  {
+                    title: 'Ingrese la nueva respuesta' ,
+                    input: 'text',
+                    inputValue: resultadoPregunta.cantidadPorRespuesta[0],    
+                  }
+              ]).then((result) => {
+                if (result.value) {
+                  
+                  contexto.limpiarFormulario();
+                  contexto.controlador.editarPregunta(result.value, id);
+                }
+    });
+  }})},
+
 
   limpiarFormulario: function(){
     $('.form-group.answer.has-feedback.has-success').remove();
