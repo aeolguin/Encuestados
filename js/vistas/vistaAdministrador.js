@@ -68,15 +68,26 @@ VistaAdministrador.prototype = {
       var respuestas = [];
 
       $('[name="option[]"]').each(function() {
-        respuesta = $(this).val();
-        if (respuesta != ""){
+        var respuesta = $(this).val();
         respuestas.push({textoRespuesta: respuesta, cantidad: 0});
-        }
-
         //completar
       })
-      contexto.limpiarFormulario();
-      contexto.controlador.agregarPregunta(value, respuestas);
+       if (respuestas[0].textoRespuesta === ""){
+        Swal.fire({
+          type: "error",
+          title: "Debe ingresar datos para crear una pregunta",
+          showConfirmButton: true,
+          confirmButtonColor: "#EA1D5E",
+        });
+        }else {
+          for (var i=0;i<respuestas.length;i++){
+            if (respuestas[i].textoRespuesta === ""){
+              respuestas.splice(i,1)
+            }
+          }
+           contexto.limpiarFormulario();
+           contexto.controlador.agregarPregunta(value, respuestas);
+        }
     })
 
     e.botonBorrarPregunta.click(function() {
@@ -85,6 +96,7 @@ VistaAdministrador.prototype = {
         Swal.fire({
           title: "seleccione la respuesta que desea borrar",
           showConfirmButton: true,
+          confirmButtonColor: "#EA1D5E",
           
         });
       }else {
@@ -104,28 +116,30 @@ VistaAdministrador.prototype = {
         Swal.fire({
           title: "seleccione una respuesta para editar",
           showConfirmButton: true,
+          confirmButtonColor: "#EA1D5E",
         });
       } else {
-            var resultadoPregunta = contexto.controlador.obtenerPregunta(id);
-            Swal.mixin({
-                input: 'text',
-                confirmButtonText: 'Editar',
-                showCancelButton: true,
-            }).queue([
-                  {
-                    title: 'Ingrese la nueva pregunta' ,
-                    input: 'text',
-                    inputValue: resultadoPregunta.textoPregunta,
-                  },
+          var resultadoPregunta = contexto.controlador.obtenerPregunta(id);
+          Swal.mixin({
+              input: 'text',
+              confirmButtonText: 'Editar',
+              showCancelButton: true,
+              confirmButtonColor: "#EA1D5E",
+           }).queue([
+                {
+                  title: 'Ingrese la nueva pregunta' ,
+                  input: 'text',
+                  confirmButtonColor: "#EA1D5E",
+                  inputValue: resultadoPregunta.textoPregunta,
+                },
 
-              ]).then((result) => {
-                if (result.value) {
+            ]).then((result) => {
+               if (result.value) {
                   contexto.limpiarFormulario();
                   contexto.controlador.editarPregunta(result.value, id);
                 }
     });
   }})},
-
 
   limpiarFormulario: function(){
     $('.form-group.answer.has-feedback.has-success').remove();

@@ -51,8 +51,8 @@ Modelo.prototype = {
       if (this.preguntas[i].cantidadPorRespuesta[j].textoRespuesta === respuesta) {
         this.preguntas[i].cantidadPorRespuesta[j].cantidad++;
         break;
+        }
       }
-    }
     };
     this.guardar();
     this.votoAgregado.notificar();
