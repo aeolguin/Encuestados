@@ -26,8 +26,8 @@ Controlador.prototype = {
     return this.modelo.obtenerPregunta(id)
   },
 
-  agregarVoto: function(nombrePregunta, respuestaSeleccionada, id) {
-    this.modelo.agregarVoto(nombrePregunta, respuestaSeleccionada, id);
+  agregarVoto: function(nombrePregunta, respuestaSeleccionada) {
+    this.modelo.agregarVoto(nombrePregunta, respuestaSeleccionada);
   },
 
 

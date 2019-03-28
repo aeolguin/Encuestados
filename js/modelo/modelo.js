@@ -45,14 +45,15 @@ Modelo.prototype = {
   },
 
   //Se suma 1 al voto de una respuesta
-  agregarVoto: function(nombrePregunta, respuestaSeleccionada, id) {
-    this.preguntas.forEach(function (element, i) {
-      if (element.id === id){
-        console.log("entro en el if")
-       // modelo.preguntas[i].cantidad = modelo.preguntas[i].cantidad + 1
-        //console.log(modelo.preguntas[i].cantidad)
+  agregarVoto: function(pregunta, respuesta, id) {
+    for (var i=0;i<this.preguntas.length;i++){
+      for (var j=0;j<this.preguntas[i].cantidadPorRespuesta.length;j++){
+      if (this.preguntas[i].cantidadPorRespuesta[j].textoRespuesta === respuesta) {
+        this.preguntas[i].cantidadPorRespuesta[j].cantidad++;
+        break;
       }
-    });
+    }
+    };
     this.guardar();
     this.votoAgregado.notificar();
   },
@@ -67,7 +68,6 @@ Modelo.prototype = {
     this.preguntas.forEach(function (element, i) {
       if (element.id === id){
         modelo.preguntas[i].textoPregunta = data[0];
-        modelo.preguntas[i].cantidadPorRespuesta[0] = data[1];
       }
     });
     this.guardar();  

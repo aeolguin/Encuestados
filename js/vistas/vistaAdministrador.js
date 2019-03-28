@@ -43,7 +43,7 @@ VistaAdministrador.prototype = {
     var titulo = interiorItem.find('h5');
     titulo.text(pregunta.textoPregunta);
     interiorItem.find('small').text(pregunta.cantidadPorRespuesta.map(function(resp){
-      return " " + resp;
+      return " " + resp.textoRespuesta;
     }));
     nuevoItem.html($('.d-flex').html());
     return nuevoItem;
@@ -69,7 +69,10 @@ VistaAdministrador.prototype = {
 
       $('[name="option[]"]').each(function() {
         respuesta = $(this).val();
-        respuestas.push(respuesta);
+        if (respuesta != ""){
+        respuestas.push({textoRespuesta: respuesta, cantidad: 0});
+        }
+
         //completar
       })
       contexto.limpiarFormulario();
@@ -81,10 +84,8 @@ VistaAdministrador.prototype = {
       if (isNaN(id)) {
         Swal.fire({
           title: "seleccione la respuesta que desea borrar",
-          animation: true,
-          customClass: {
-            popup: 'animated tada'
-          },
+          showConfirmButton: true,
+          
         });
       }else {
         contexto.limpiarFormulario();
@@ -108,9 +109,8 @@ VistaAdministrador.prototype = {
             var resultadoPregunta = contexto.controlador.obtenerPregunta(id);
             Swal.mixin({
                 input: 'text',
-                confirmButtonText: 'Next &rarr;',
+                confirmButtonText: 'Editar',
                 showCancelButton: true,
-                progressSteps: ['1', '2']
             }).queue([
                   {
                     title: 'Ingrese la nueva pregunta' ,
@@ -118,14 +118,8 @@ VistaAdministrador.prototype = {
                     inputValue: resultadoPregunta.textoPregunta,
                   },
 
-                  {
-                    title: 'Ingrese la nueva respuesta' ,
-                    input: 'text',
-                    inputValue: resultadoPregunta.cantidadPorRespuesta[0],    
-                  }
               ]).then((result) => {
                 if (result.value) {
-                  
                   contexto.limpiarFormulario();
                   contexto.controlador.editarPregunta(result.value, id);
                 }

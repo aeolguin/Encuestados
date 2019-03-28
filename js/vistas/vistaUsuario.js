@@ -22,6 +22,7 @@ var VistaUsuario = function(modelo, controlador, elementos) {
 
   this.modelo.votoAgregado.suscribir(function() {
     contexto.reconstruirLista();
+    contexto.reconstruirGrafico();
   });
 
   this.modelo.preguntaEditada.suscribir(function() {
@@ -53,6 +54,7 @@ VistaUsuario.prototype = {
       respuestas.forEach (function(elemento) {
         listaParaGrafico.push([elemento.textoRespuesta,elemento.cantidad]);
       });
+      
       contexto.dibujarGrafico(clave.textoPregunta, listaParaGrafico);
     })
   },
@@ -79,16 +81,15 @@ VistaUsuario.prototype = {
   //muestra respuestas
   mostrarRespuestas:function(listaPreguntas,respuestas, clave){
     respuestas.forEach (function(elemento) {
-      if (elemento != ""){
       listaPreguntas.append($('<input>', {
         type: 'radio',
-        value: elemento,
+        value: elemento.textoRespuesta,
         name: clave.id,
       }));
       listaPreguntas.append($("<label>", {
-        for: elemento,
-        text: elemento
-      }))};
+        for: elemento.textoRespuesta,
+        text: elemento.textoRespuesta,
+      }));
     });
   },
 
@@ -100,7 +101,7 @@ VistaUsuario.prototype = {
         var respuestaSeleccionada = $('input[name=' + id + ']:checked').val();
         $('input[name=' + id + ']').prop('checked',false);
         if (respuestaSeleccionada != undefined) {
-        contexto.controlador.agregarVoto(nombrePregunta,respuestaSeleccionada,id);
+        contexto.controlador.agregarVoto(nombrePregunta,respuestaSeleccionada);
         }
       });
   },
